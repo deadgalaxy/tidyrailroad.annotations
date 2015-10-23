@@ -57,13 +57,7 @@
     <jar basedir="src/main/java" destfile="build/artifacts/src.jar" compress="yes" level="9"/>
   </target>
   <target name="publish" depends="init,javadoc,print,compile,source">
-    <exec executable="git" outputproperty="pubrevision">
-      <arg value="describe"/>
-      <arg value="--tags"/>
-      <arg value="--long"/>
-      <arg value="--dirty"/>
-      <arg value="--always"/>
-    </exec>
+    <exec executable="src/bin/revision.sh" outputproperty="pubrevision"/>
     <mkdir dir="build/repository"/>
     <property name="artifacts" location="build/artifacts"/>
     <property name="repository" location="build/repository"/>
