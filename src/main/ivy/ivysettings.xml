@@ -23,7 +23,7 @@
   <resolvers>
     <filesystem name="public">
       <ivy pattern="${repository}/[module]/ivy-[revision].xml" />
-      <artifact pattern="${repository}/[module]/[conf]/[artifact]-[type]-[revision].[ext].[ext]" />
+      <artifact pattern="${repository}/[organization]/[module]/[conf]/[artifact]-[type]-[revision].[ext]" />
     </filesystem>
   </resolvers>
   <modules>
