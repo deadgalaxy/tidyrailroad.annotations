@@ -63,7 +63,7 @@
     <property name="repository" location="build/repository"/>
     <ivy:configure file="src/main/ivy/ivysettings.xml"/>
     <ivy:resolve file="src/main/ivy/ivy.xml"/>
-    <ivy:publish resolver="public" pubrevision="${pubrevision}" status="release">
+    <ivy:publish resolver="public" pubrevision="${pubrevision}" status="release" update="yes">
       <artifacts pattern="${artifacts}/[type].[ext]"/>
     </ivy:publish>
   </target>
