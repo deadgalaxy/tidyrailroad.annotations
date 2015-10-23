@@ -18,7 +18,7 @@
     You should have received a copy of the GNU General Public License
     along with tidyrailroad.  If not, see <http://www.gnu.org/licenses/>.
 */
-package com.merrymanheavyindustries.tidyrailroad;
+package com.merrymanheavyindustries.tidyrailroad.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -29,6 +29,28 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 /**
  * Use a parameter to satisfy the dependency.
  *
+ * Instead of
+ * <PRE>
+ * class X{
+ * private Object p;
+ * X(Object p){
+ * this.p = p;
+ * }
+ * }
+ * </PRE>
+ *
+ * use
+ * <PRE>
+ * abstract class X{
+ * @UseParameter
+ * abstract Object getP();
+ * }
+ * </PRE>
+ *
+ * X will be an abstract class, but
+ * the tidyrailroad depedency injection framework
+ * will know how to inject p into it.
+ * {@link UseClass}
  * {@link UseConstructor}
  **/
 @Documented

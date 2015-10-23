@@ -18,7 +18,7 @@
     You should have received a copy of the GNU General Public License
     along with tidyrailroad.  If not, see <http://www.gnu.org/licenses/>.
 */
-package com.merrymanheavyindustries.tidyrailroad;
+package com.merrymanheavyindustries.tidyrailroad.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -28,6 +28,22 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
  * Use null to satisfy the depency.
+ *
+ * Instead of
+ * <PRE>
+ * Object obj = null;
+ * </PRE>
+ *
+ * use
+ * <PRE>
+ * Object obj = knull();
+ * </PRE>
+ *
+ * where
+ * <PRE>
+ * @UseNull
+ * abstract Object knull();
+ * </PRE>
  **/
 @Documented
 @Retention(SOURCE)

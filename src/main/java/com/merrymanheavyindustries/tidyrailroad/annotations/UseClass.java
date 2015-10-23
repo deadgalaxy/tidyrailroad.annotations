@@ -27,33 +27,30 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
- * Uses a method of the instance to satisfy the dependency.
+ * The tidyrailroad dependency injection framework should
+ * use a constructor to satisfy this dependency.
+ * But unlike @see UseConstructor it should figure out
+ * which class to use based on the dependency return type
+ * rather than you having to specify it.
  *
- * instead of
+ * Instead of
  * <PRE>
- * String x = "Hello World";
- * System.out.println(x.toString());
+ * String x = new String ( "Hello World") ;
  * </PRE>
  *
- * do
+ * use
  * <PRE>
- * String x = "Hello World";
- * System.out.println(toString(x));
+ * String x = newString( "Hello World");
  * </PRE>
  *
  * where
  * <PRE>
- * @UseInstanceMethod
- * abstract String toString(String val);
+ * @UseClass
+ * abstract String newString(String val);
  * </PRE>
- *
- * This may seem silly, but it facilitates unit testing.
- *
- * String.toString is final and cannot be mocked (easily).
- * OurClass.toString(String) is abstract and can easily be mocked.
  **/
 @Documented
 @Retention(SOURCE)
 @Target(METHOD)
-public @interface UseInstanceMethod {
+public @interface UseClass {
 }

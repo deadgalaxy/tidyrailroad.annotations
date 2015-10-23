@@ -18,7 +18,7 @@
     You should have received a copy of the GNU General Public License
     along with tidyrailroad.  If not, see <http://www.gnu.org/licenses/>.
 */
-package com.merrymanheavyindustries.tidyrailroad;
+package com.merrymanheavyindustries.tidyrailroad.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
