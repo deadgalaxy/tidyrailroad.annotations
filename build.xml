@@ -57,12 +57,19 @@
     <jar basedir="src/main/java" destfile="build/artifacts/src.jar" compress="yes" level="9"/>
   </target>
   <target name="publish" depends="init,javadoc,print,compile,source">
+    <exec executable="git" outputproperty="pubrevision">
+      <arg value="describe"/>
+      <arg value="--tags"/>
+      <arg value="--long"/>
+      <arg value="--dirty"/>
+      <arg value="--always"/>
+    </exec>
     <mkdir dir="build/repository"/>
     <property name="artifacts" location="build/artifacts"/>
     <property name="repository" location="build/repository"/>
     <ivy:configure file="src/main/ivy/ivysettings.xml"/>
     <ivy:resolve file="src/main/ivy/ivy.xml"/>
-    <ivy:publish resolver="public" pubrevision="0" status="release">
+    <ivy:publish resolver="public" pubrevision="${pubrevision}" status="release">
       <artifacts pattern="${artifacts}/[type].[ext]"/>
     </ivy:publish>
   </target>
