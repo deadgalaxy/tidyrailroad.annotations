@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+  <info organisation="com.merrymanheavyindustries.tidyrailroad" module="annotations"/>
+  <configurations>
+    <conf name="runtime" description="run-time dependencies"/>
+    <conf name="documentation" description="documentation"/>
+  </configurations>
+  <publications>
+    <artifact name="tidyrailroad" type="javadoc" ext="jar" conf="documentation"/>
+    <artifact name="tidyrailroad" type="print" ext="ps" conf="documentation"/>
+    <artifact name="tidyrailroad" type="jar" ext="jar" conf="runtime"/>
+    <artifact name="tidyrailroad" type="src" ext="jar" conf="documentation"/>
+  </publications>
+</ivy-module>

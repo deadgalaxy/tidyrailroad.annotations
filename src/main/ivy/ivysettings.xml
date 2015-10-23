@@ -1,0 +1,11 @@
+<ivysettings>
+  <resolvers>
+    <filesystem name="public">
+      <ivy pattern="${repository}/[module]/ivy-[revision].xml" />
+      <artifact pattern="${repository}/[module]/[conf]/[artifact]-[type]-[revision].[ext].[ext]" />
+    </filesystem>
+  </resolvers>
+  <modules>
+    <module organisation="com.merrymanheavyindustries.tidyrailroad" name=".*" resolver="public"/>
+  </modules>
+</ivysettings>

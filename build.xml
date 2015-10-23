@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="" xmlns:ivy="antlib:org.apache.ivy.ant">
+  <target name="init" description="Install ivy">
+    <property name="major" value="2"/>
+    <property name="minor" value="4"/>
+    <property name="patch" value="0"/>
+    <mkdir dir="build"/>
+    <get dest="build/ivy-${major}.${minor}.${patch}.jar" src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${major}.${minor}.${patch}/ivy-${major}.${minor}.${patch}.jar" skipexisting="true"/>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant">
+      <classpath>
+	<fileset dir="build" includes="ivy-${major}.${minor}.${patch}.jar"/>
+      </classpath>
+    </taskdef>
+  </target>
+  <target name="checkstyle" depends="init" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle.ant">
+    <ivy:resolve>
+      <dependency org="com.puppycrawl.tools" name="checkstyle" rev="6.10.1"/>
+    </ivy:resolve>
+    <mkdir dir="build/lib/checkstyle"/>
+    <ivy:retrieve pattern="build/lib/checkstyle/[artifact]-[conf]-[type]-[revision].[ext]"/>
+    <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties" uri="antlib:com.puppycrawl.tools.checkstyle.ant">
+      <classpath>
+	<fileset dir="build/lib/checkstyle"/>
+      </classpath>
+    </taskdef>
+    <cs:checkstyle config="src/main/checkstyle/checks.xml">
+      <fileset dir="src/main/java" includes="**/*.java"/>
+    </cs:checkstyle>
+  </target>
+  <target name="javadoc" depends="init">
+    <mkdir dir="build/work/javadoc"/>
+    <javadoc linksource="yes" destdir="build/work/javadoc">
+      <fileset dir="src/main/java"/>
+    </javadoc>
+    <mkdir dir="build/artifacts"/>
+    <jar basedir="build/work/javadoc" destfile="build/artifacts/javadoc.jar" compress="yes" level="9"/>
+  </target>
+  <target name="print" depends="init">
+    <mkdir dir="build/artifacts"/>
+    <fileset dir="src/main/java" id="src"/>
+    <pathconvert refid="src" pathsep=" " property="srcfiles"/>
+    <exec executable="a2ps">
+      <arg value="-1"/>
+      <arg value="--toc"/>
+      <arg line="-o build/artifacts/print.ps"/>
+      <arg line="${srcfiles}"/>
+    </exec>
+  </target>
+  <target name="compile">
+    <mkdir dir="build/classes"/>
+    <javac srcdir="src/main/java" destdir="build/classes"/>
+    <mkdir dir="build/artifacts"/>
+    <jar basedir="build/classes" destfile="build/artifacts/jar.jar" compress="yes" level="9"/>
+  </target>
+  <target name="source">
+    <mkdir dir="build/artifacts"/>
+    <jar basedir="src/main/java" destfile="build/artifacts/src.jar" compress="yes" level="9"/>
+  </target>
+  <target name="publish" depends="init,javadoc,print,compile,source">
+    <mkdir dir="build/repository"/>
+    <property name="artifacts" location="build/artifacts"/>
+    <property name="repository" location="build/repository"/>
+    <ivy:configure file="src/main/ivy/ivysettings.xml"/>
+    <ivy:resolve file="src/main/ivy/ivy.xml"/>
+    <ivy:publish resolver="public" pubrevision="0" status="release">
+      <artifacts pattern="${artifacts}/[type].[ext]"/>
+    </ivy:publish>
+  </target>
+</project>
