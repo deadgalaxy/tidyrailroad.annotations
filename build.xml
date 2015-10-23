@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (C) 2015
+    Emory Merryman
+    emory.merryman@gmail.com
+
+    This file is part of tidyrailroad.
+
+    tidyrailroad is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    tidyrailroad is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with tidyrailroad.  If not, see <http://www.gnu.org/licenses/>.
+    -->
 <project name="" xmlns:ivy="antlib:org.apache.ivy.ant">
   <target name="init" description="Install ivy">
     <property name="major" value="2"/>
@@ -25,6 +45,7 @@
     </taskdef>
     <cs:checkstyle config="src/main/checkstyle/checks.xml">
       <fileset dir="src/main/java" includes="**/*.java"/>
+      <property key="checkstyle.header.file" value="src/main/checkstyle/header.txt"/>
     </cs:checkstyle>
   </target>
   <target name="javadoc" depends="init">
