@@ -19,7 +19,7 @@
     You should have received a copy of the GNU General Public License
     along with tidyrailroad.  If not, see <http://www.gnu.org/licenses/>.
     -->
-<project name="" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="" xmlns:ivy="antlib:org.apache.ivy.ant" basedir=".">
   <target name="init" description="Install ivy">
     <property name="major" value="2"/>
     <property name="minor" value="4"/>
@@ -31,61 +31,72 @@
 	<fileset dir="build" includes="ivy-${major}.${minor}.${patch}.jar"/>
       </classpath>
     </taskdef>
+    <property name="repository" location="build/repository"/>
+    <mkdir dir="${repository}"/>
+    <ivy:configure file="${basedir}/src/ivy/ivysettings.xml"/>
+  </target>
+  <target name="clean">
+    <delete dir="build"/>
   </target>
   <target name="checkstyle" depends="init" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle.ant">
     <ivy:resolve>
       <dependency org="com.puppycrawl.tools" name="checkstyle" rev="6.10.1"/>
     </ivy:resolve>
-    <mkdir dir="build/lib/checkstyle"/>
-    <ivy:retrieve pattern="build/lib/checkstyle/[artifact]-[conf]-[type]-[revision].[ext]"/>
+    <mkdir dir="${basedir}/build/checkstyle"/>
+    <ivy:retrieve pattern="${basedir}/build/checkstyle/[artifact]-[conf]-[type]-[revision].[ext]"/>
     <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties" uri="antlib:com.puppycrawl.tools.checkstyle.ant">
       <classpath>
-	<fileset dir="build/lib/checkstyle"/>
+	<fileset dir="${basedir}/build/checkstyle"/>
       </classpath>
     </taskdef>
-    <cs:checkstyle config="src/main/checkstyle/checks.xml">
-      <fileset dir="src/main/java" includes="**/*.java"/>
-      <property key="checkstyle.header.file" value="src/main/checkstyle/header.txt"/>
+    <cs:checkstyle config="${basedir}/src/checkstyle/checks.xml">
+      <fileset dir="${basedir}/src/java" includes="**/*.java"/>
+      <property key="checkstyle.header.file" value="${basedir}/src/checkstyle/header.txt"/>
     </cs:checkstyle>
   </target>
   <target name="javadoc" depends="init">
-    <mkdir dir="build/work/javadoc"/>
-    <javadoc linksource="yes" destdir="build/work/javadoc">
-      <fileset dir="src/main/java"/>
+    <mkdir dir="${basedir}/build/javadoc"/>
+    <javadoc linksource="yes" destdir="${basedir}/build/javadoc">
+      <fileset dir="${basedir}/src/java"/>
     </javadoc>
-    <mkdir dir="build/artifacts"/>
-    <jar basedir="build/work/javadoc" destfile="build/artifacts/javadoc.jar" compress="yes" level="9"/>
+    <mkdir dir="${basedir}/build/artifacts"/>
+    <jar basedir="${basedir}/build/javadoc" destfile="${basedir}/build/artifacts/javadoc.jar" compress="yes" level="9"/>
   </target>
   <target name="print" depends="init">
-    <mkdir dir="build/artifacts"/>
-    <fileset dir="src/main/java" id="src"/>
-    <pathconvert refid="src" pathsep=" " property="srcfiles"/>
+    <mkdir dir="${basedir}/build/artifacts"/>
+    <fileset dir="${basedir}" id="src1">
+      <include name="COPYING"/>
+      <include name="build.xml"/>
+      <include name="src/**/*"/>
+    </fileset>
+    <pathconvert refid="src1" pathsep=" " property="src2"/>
     <exec executable="a2ps">
       <arg value="-1"/>
       <arg value="--toc"/>
       <arg line="-o build/artifacts/print.ps"/>
-      <arg line="${srcfiles}"/>
+      <arg line="${src2}"/>
     </exec>
   </target>
   <target name="compile">
-    <mkdir dir="build/classes"/>
-    <javac srcdir="src/main/java" destdir="build/classes"/>
-    <mkdir dir="build/artifacts"/>
-    <jar basedir="build/classes" destfile="build/artifacts/jar.jar" compress="yes" level="9"/>
+    <mkdir dir="${basedir}/build/compile"/>
+    <javac srcdir="${basedir}/src/java" destdir="${basedir}/build/compile"/>
+    <mkdir dir="${basedir}/build/artifacts"/>
+    <jar basedir="${basedir}/build/compile" destfile="${basedir}/build/artifacts/jar.jar" compress="yes" level="9"/>
   </target>
   <target name="source">
-    <mkdir dir="build/artifacts"/>
-    <jar basedir="src/main/java" destfile="build/artifacts/src.jar" compress="yes" level="9"/>
+    <mkdir dir="${basedir}/build/artifacts"/>
+    <jar basedir="${basedir}/src/java" destfile="${basedir}/build/artifacts/src.jar" compress="yes" level="9"/>
   </target>
-  <target name="publish" depends="init,javadoc,print,compile,source">
-    <exec executable="src/bin/revision.sh" outputproperty="pubrevision"/>
-    <mkdir dir="build/repository"/>
-    <property name="artifacts" location="build/artifacts"/>
-    <property name="repository" location="build/repository"/>
-    <ivy:configure file="src/main/ivy/ivysettings.xml"/>
-    <ivy:resolve file="src/main/ivy/ivy.xml"/>
+  <target name="publish" depends="clean,init,checkstyle,javadoc,print,compile,source">
+    <mkdir dir="${basedir}/build"/>
+    <exec executable="src/bin/revision.sh" outputproperty="pubrevision">
+      <arg value="1"/>
+      <arg value="2"/>
+    </exec>
+    <mkdir dir="${basedir}/build/repository"/>
+    <ivy:resolve file="${basedir}/src/ivy/ivy.xml"/>
     <ivy:publish resolver="public" pubrevision="${pubrevision}" status="release" update="yes">
-      <artifacts pattern="${artifacts}/[type].[ext]"/>
+      <artifacts pattern="${basedir}/build/artifacts/[type].[ext]"/>
     </ivy:publish>
   </target>
 </project>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/*
     Copyright (C) 2015
     Emory Merryman
     emory.merryman@gmail.com
@@ -18,17 +17,45 @@
 
     You should have received a copy of the GNU General Public License
     along with tidyrailroad.  If not, see <http://www.gnu.org/licenses/>.
-    -->
-<ivy-module version="2.0">
-  <info organisation="com.merrymanheavyindustries.tidyrailroad" module="annotations"/>
-  <configurations>
-    <conf name="runtime" description="run-time dependencies"/>
-    <conf name="documentation" description="documentation"/>
-  </configurations>
-  <publications>
-    <artifact name="tidyrailroad" type="javadoc" ext="jar" conf="documentation"/>
-    <artifact name="tidyrailroad" type="print" ext="ps" conf="documentation"/>
-    <artifact name="tidyrailroad" type="jar" ext="jar" conf="runtime"/>
-    <artifact name="tidyrailroad" type="src" ext="jar" conf="documentation"/>
-  </publications>
-</ivy-module>
+*/
+
+package com.merrymanheavyindustries.tidyrailroad.annotations;
+
+/**
+ * This enum can be used to describe what to do when
+ * processing an unannotated abstract method.
+ *
+ * The only difference between this and
+ * @{see UannatotaedConcreteMethod} is
+ * is PROCEED.
+ **/
+public enum UnannotatedAbstractMethod {
+    /**
+     * {@see UseCast}.
+     **/
+    CAST,
+    /**
+     * {@see UseClass}.
+     **/
+    CLASS,
+    /**
+     * {@see UseInstanceMethod}.
+     **/
+    INSTANCE_METHOD,
+    /**
+     * {@see UseNull}.
+     **/
+    NULL,
+    /**
+     * {@see UseParameter}.
+     **/
+    PARAMETER,
+    /**
+     * {@see UseProperty}.
+     **/
+    PROPERTY,
+    /**
+     * {@see UseUnsupportedOperationException}.
+     **/
+    UNSUPPORTED_OPERATION_EXCEPTION;
+}
